@@ -1,0 +1,24 @@
+{
+    "name": "leonc/routebinder",
+    "description": "Painless way to bind eloquent models to routes with advanced validation",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "LeonCzerwinski",
+            "email": "leonczerwinski202@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload-dev": {
+        "psr-4": {
+            "Leonc\\RouteBinder\\": "src/"
+        }
+    },
+	"autoload": {
+        "psr-4": {
+            "Leonc\\RouteBinder\\": "src/"
+        }
+    }
+}
