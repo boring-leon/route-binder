@@ -2,18 +2,19 @@
 
 namespace Leonc\RouteBinder\Strategy;
 
+use Illuminate\Database\Eloquent\Model;
+
 class BaseStrategy
 {
-    public function fail($message, $modelName){
-        response()->view('welcome')->throwResponse();
-        //return response()->json(['problem' => $message])->throwResponse();
+    public function fail($message, string $modelName){
+        return response()->json(['problem' => $message])->throwResponse();
     }
 
     public function bind($model){
         return $model;
     }
 
-    public function getModel($model, $param, array $relations){
+    public function getModel(Model $model, $param, array $relations){
         $instance = $model->find($param);
         if(is_null($instance)) return null;
 

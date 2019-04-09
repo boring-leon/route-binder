@@ -2,13 +2,14 @@
 
 namespace Leonc\RouteBinder\Assertion;
 
-use Leonc\RouteBinder\Builders\StrategyBuilder;
+use Leonc\RouteBinder\Strategy\BaseStrategy;
+use Illuminate\Database\Eloquent\Model;
 
 class AssertionInvoker
 {
-    public function __construct($model, $strategy){
+    public function __construct(Model $model, BaseStrategy $strategy){
         $this->assertionBuilder = new AssertionBuilder($model);
-        $this->strategy = StrategyBuilder::get(null);
+        $this->strategy = $strategy;
         $this->customFailMessage = null;
         $this->isStrategyPersistant = false;
         $this->isFailMessagePersistant = false;
@@ -50,17 +51,27 @@ class AssertionInvoker
         return $this;
     }
 
-    public function strategy($class = null){
+    public function strategy(string $class = BaseStrategy::class){
         if(!$this->isStrategyPersistant){
-            $this->strategy = StrategyBuilder::get($class);
+            $this->setStrategyOrThrow($class);
         }
         return $this;
     }
 
-    public function persistStrategy($class){
-        $this->strategy = StrategyBuilder::get($class);
+    public function persistStrategy(string $class = BaseStrategy::class){
+        $this->setStrategyOrThrow($class);
         $this->isStrategyPersistant = true;
         return $this;
+    }
+
+    private function setStrategyOrThrow(string $class){
+        $strategyInstance = new $class;
+        if($strategyInstance instanceof BaseStrategy){
+            $this->strategy = new $class;
+        }
+        else{
+            throw 'Strategy has to extend Leonc\RouteBinder\Strategy\BaseStrategy!';
+        }
     }
 
 }

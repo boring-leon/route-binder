@@ -4,35 +4,28 @@ namespace Leonc\RouteBinder;
 
 use Leonc\RouteBinder\Assertion\AssertionInvoker;
 use Leonc\RouteBinder\Builders\ModelBuilder;
-use Leonc\RouteBinder\Builders\StrategyBuilder;
+use Leonc\RouteBinder\Strategy\BaseStrategy;
 
 class Binder
 { 
     private $invoker;
     
-    protected function __construct($modelClass, $param, $strategy, $relations){
+    protected function __construct(string $modelClass, $param, BaseStrategy $strategy, array $relations){
         $this->modelClass = $modelClass;
         $this->param = $param;
         $this->relations = $relations;
-        $this->setStrategy($strategy);
+        $this->strategy = $strategy;
         $this->setModel();
         $this->setInvoker();
     }
 
-    public static function build($modelClass, $param, $config = []){        
-        if(!array_key_exists('strategy', $config)) $config['strategy'] = null;
-        if(!array_key_exists('relations', $config)) $config['relations'] = [];
-
-        $instance = new self($modelClass, $param, $config['strategy'], $config['relations'] );
+    public static function build(string $modelClass, $param, array $relations = []){        
+        $instance = new self($modelClass, $param, new BaseStrategy, $relations );
         return $instance->getInvoker();
     }
 
     public function getInvoker(){
         return $this->invoker;
-    }
-
-    private function setStrategy($strategy){
-        $this->strategy = StrategyBuilder::get($strategy);
     }
     
     private function setInvoker(){

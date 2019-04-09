@@ -2,18 +2,19 @@
 
 namespace Leonc\RouteBinder\Builders;
 
+use Leonc\RouteBinder\Strategy\BaseStrategy;
+
 class ModelBuilder
 {
-    public function __construct($class, $key, $strategy, $relations){
-        $this->class = $class;
+    public function __construct(string $modelClass, string $key, BaseStrategy $strategy, array $relations = []){
+        $this->class = $modelClass;
         $this->key = $key;
         $this->strategy = $strategy;
         $this->relations = $relations;
     }
 
     public function getModelOrFail(){
-        $model = $this->strategy->getModel(new $this->class, $this->key, $this->relations);
-        
+        $model = $this->strategy->getModel((new $this->class ), $this->key, $this->relations);
         if($this->strategy->exists($model)){
             return $model;
         }
