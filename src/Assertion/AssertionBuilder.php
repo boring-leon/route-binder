@@ -135,6 +135,13 @@ class AssertionBuilder
         );
     }
 
+    public function modelPasses(callable $callback){
+        return $this->makeResult(
+            $callback($this->model),
+            "Model validation failed"
+        );
+    }
+
     private function getAttrToComparison(string $attr){
         $field = $this->model->{$attr};
         if(is_countable($field)) return count($field);    
