@@ -46,6 +46,19 @@ Route::bind('published_post', function($post_id) {
 
 ```
 
+## Handling edge cases with callback validation 
+
+If none of the available assertions fits your needs, don't worry because you can always create a custom one within a callback function
+
+```php
+    Binder::build(\App\Post::class, $post_id)
+    ->modelPasses(function($model) {
+        //do what you need to do and return a boolean
+        return true;
+    })->bind();
+});
+```
+
 ## Error handling ##
 ### Custom error structure & response type ###
 
